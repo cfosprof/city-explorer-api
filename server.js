@@ -47,6 +47,9 @@ app.get('/weather', async (req, res) => {
     res.json(forecasts);
   } catch (error) {
     console.error('Error fetching weather data:', error);
+    console.error('Error response:', error.response);
+    console.error('Error status:', error.response.status);
+    console.error('Error data:', error.response.data);
     res.status(500).json({ error: 'Error fetching weather data.' });
   }
 });
