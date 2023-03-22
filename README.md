@@ -17,7 +17,7 @@ This is the server-side implementation for the City Explorer application. The se
 - [API](#api)
 - [License](#license)
 
-## Requirements
+## Requiremen
 
 - Node.js (v14.x or later)
 - npm (v6.x or later)
