@@ -15,18 +15,20 @@ router.get('/movies', async (req, res) => {
       },
     });
 
-    const movies = response.data.results.map(
-      (movie) =>
-        new Movie(
-          movie.title,
-          movie.overview,
-          movie.vote_average,
-          movie.vote_count,
-          `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-          movie.popularity,
-          movie.release_date
-        )
-    );
+    const movies = response.data.results
+      .filter((movie) => movie.poster_path)
+      .map(
+        (movie) =>
+          new Movie(
+            movie.title,
+            movie.overview,
+            movie.vote_average,
+            movie.vote_count,
+            `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+            movie.popularity,
+            movie.release_date
+          )
+      );
     res.json(movies);
   } catch (error) {
     console.error('Error fetching movie data:', error);
