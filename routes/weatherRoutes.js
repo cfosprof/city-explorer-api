@@ -11,7 +11,7 @@ router.get('/weather', async (req, res) => {
       params: {
         lat: lat,
         lon: lon,
-        key: process.env.WEATHER_API_KEY,
+        key: process.env.REACT_APP_WEATHER_API_KEY,
         units: 'imperial',
         days: 14
       }

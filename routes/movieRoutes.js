@@ -9,7 +9,7 @@ router.get('/movies', async (req, res) => {
   try {
     const response = await axios.get('https://api.themoviedb.org/3/search/movie', {
       params: {
-        api_key: process.env.MOVIE_API_KEY,
+        api_key: process.env.REACT_APP_MOVIE_API_KEY,
         query: city,
         include_adult: false,
       },
