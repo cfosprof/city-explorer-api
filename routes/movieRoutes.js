@@ -1,14 +1,28 @@
 const express = require('express');
 const axios = require('axios');
 const Movie = require('../models/Movie');
+const { cache } = require('../cache');
 
 // Instantiate Express router
 const router = express.Router();
+
+// Define a cache invalidation time in milliseconds (e.g. 2 hours)
+const CACHE_INVALIDATION_TIME = 2 * 60 * 60 * 1000;
+
+// Define a helper function to check if cache data is still valid
+function isCacheValid(timestamp) {
+  return Date.now() - timestamp < CACHE_INVALIDATION_TIME;
+}
 
 // Define a GET endpoint for retrieving movies based on a city
 router.get('/movies', async (req, res) => {
   // Extract the "city" parameter from the query string
   const { city } = req.query;
+
+  // Check if the cache contains valid data
+  if (cache.movies[city] && isCacheValid(cache.movies[city].timestamp)) {
+    return res.json(cache.movies[city].data);
+  }
 
   try {
     // Make a request to the movie database API with our API key and city
@@ -35,6 +49,13 @@ router.get('/movies', async (req, res) => {
             movie.release_date
           )
       );
+
+    // Cache the movie data
+    cache.movies[city] = {
+      timestamp: Date.now(),
+      data: movies,
+    };
+
     // Respond with the array of Movie objects in JSON format
     res.json(movies);
   } catch (error) {
